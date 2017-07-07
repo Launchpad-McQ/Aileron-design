@@ -9,19 +9,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Input of flap deflection angles.
+print "delta is flap deflection angle"
 delta1 = float(raw_input("Lower delta limit:") or 14)
 delta2 = float(raw_input("Upper delta limit:") or 15)
-dstep = float(raw_input("delta step length:") or 0.2)
-airfoil = str(raw_input("Enter airfoil file name: ") or "naca632615.dat")
-alfa = str(raw_input("Alfa (angle of attack of wing. default 2):") or 2)
-flaphingexpos =  str(raw_input("Flap hinge x position: ") or 0.75)
-bolcal = str(raw_input("Calculate roll helix angle? (y/n)") or "y")
+dstep = float(raw_input("delta step length (default 0.2):") or 0.2)
+airfoil = str(raw_input("Enter airfoil file name (default naca632615.dat) : ") or "naca632615.dat")
+alfa = str(raw_input("Alfa (angle of attack of wing. (default 2):") or 2)
+flaphingexpos =  str(raw_input("Flap hinge x position (default 0.75 is 75% of cordlength from leading edge): ") or 0.75)
+bolcal = str(raw_input("Calculate roll helix angle? (y/n) (default y)") or "y")
 
 outfile = "flaptest" + str(delta1) + "-"+ str(delta2) + "__" + str(time.strftime("%H_%M_%S")) + ".txt" 
 zeroaoaoutfile = "zeroAOA"+ str(time.strftime("%H_%M_%S")) + ".txt"
 
 # Starting subprocess
-
 try:
     ps = sp.Popen(["xfoil.exe"],stdin=sp.PIPE,stdout=None,stderr=None)
 except OSError as e:
@@ -251,9 +251,9 @@ if (bolcal == "y"):
 		rollhelixangle = -deltarad*Clda/Clp
 		print "\n" + "Clda is: " 
 		print str(Clda)
-		print "Roll helik angle (rad): "
+		print "Roll helik angle (radians): "
 		print str(rollhelixangle)
-		print "(Fighter 0.09, cargo/heavy transport 0.07"
+		print "(Fighter 0.09, cargo/heavy transport 0.07)"
 		print "\n"
 
 
