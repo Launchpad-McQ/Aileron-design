@@ -214,8 +214,9 @@ def setgeo():
 	taper = float(raw_input("Wing taper: ") or 0.45)
 	cord = float(raw_input("Wing cord: ") or 0.122)
 	delta = float(raw_input("Max aileron deflection (degrees): ") or delta2)
-	b1 = float(raw_input("Inner position: ") or 0.38)
-	b2 = float(raw_input("Outer positien: ") or 0.8)
+	print "Set position of aileron. b1 is distance from plane of symmerty to inner edge of aileron. b2 is distance plane of symmery to outer edge of aileron."
+	b1 = float(raw_input("Inner position b1: ") or 0.38)
+	b2 = float(raw_input("Outer positien b2: ") or 0.8)
 
 	deltarad = 2*np.pi*delta/360
 	p = 2*(1-taper)
