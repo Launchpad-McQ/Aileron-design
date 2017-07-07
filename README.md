@@ -1,6 +1,6 @@
 # flapstest
 ## What it does:
-  Helps you to calculate your aileron position and size.
+  Helps you to calculate your aileron position and size for airplanes in small reynolds numbers (limitation of xfoil) such as RC planes.
   
 ## How to use:
 1. Put flapstest.py in same folder as your airfoil .dat file, xfoil.exe or (xfoil.app for mac os x users).
