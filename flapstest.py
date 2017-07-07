@@ -20,12 +20,7 @@ bolcal = str(raw_input("Calculate roll helix angle? (y/n)") or "y")
 outfile = "flaptest" + str(delta1) + "-"+ str(delta2) + "__" + str(time.strftime("%H_%M_%S")) + ".txt" 
 zeroaoaoutfile = "zeroAOA"+ str(time.strftime("%H_%M_%S")) + ".txt"
 
-# Starting sumprocess
-#ps = sp.Popen(["xfoil.app/Contents/Resources/xfoil"],stdin=sp.PIPE,stdout=None,stderr=None)
-
-
-
-
+# Starting subprocess
 
 try:
     ps = sp.Popen(["xfoil.exe"],stdin=sp.PIPE,stdout=None,stderr=None)
