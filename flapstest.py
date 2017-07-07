@@ -13,7 +13,7 @@ delta1 = float(raw_input("Lower delta limit:") or 14)
 delta2 = float(raw_input("Upper delta limit:") or 15)
 dstep = float(raw_input("delta step length:") or 0.2)
 airfoil = str(raw_input("Enter airfoil file name: ") or "naca632615.dat")
-alfa = str(raw_input("Alfa (angle of attack of wing. default 2):") or 0)
+alfa = str(raw_input("Alfa (angle of attack of wing. default 2):") or 2)
 flaphingexpos =  str(raw_input("Flap hinge x position: ") or 0.75)
 bolcal = str(raw_input("Calculate roll helix angle? (y/n)") or "y")
 
@@ -21,8 +21,16 @@ outfile = "flaptest" + str(delta1) + "-"+ str(delta2) + "__" + str(time.strftime
 zeroaoaoutfile = "zeroAOA"+ str(time.strftime("%H_%M_%S")) + ".txt"
 
 # Starting sumprocess
-ps = sp.Popen(["xfoil.app/Contents/Resources/xfoil"],stdin=sp.PIPE,stdout=None,stderr=None)
+#ps = sp.Popen(["xfoil.app/Contents/Resources/xfoil"],stdin=sp.PIPE,stdout=None,stderr=None)
 
+
+
+
+
+try:
+    ps = sp.Popen(["xfoil.exe"],stdin=sp.PIPE,stdout=None,stderr=None)
+except OSError as e:
+	ps = sp.Popen(["xfoil.app/Contents/Resources/xfoil"],stdin=sp.PIPE,stdout=None,stderr=None)
 
 
 def my_range(start, end, step):
@@ -102,7 +110,11 @@ def alpha0sim(airfoil,zeroaoaoutfile):
 
 # Running simulation.
 alpha0sim(airfoil,zeroaoaoutfile)
-ps = sp.Popen(["xfoil.app/Contents/Resources/xfoil"],stdin=sp.PIPE,stdout=None,stderr=None)
+
+try:
+    ps = sp.Popen(["xfoil.exe"],stdin=sp.PIPE,stdout=None,stderr=None)
+except OSError as e:
+	ps = sp.Popen(["xfoil.app/Contents/Resources/xfoil"],stdin=sp.PIPE,stdout=None,stderr=None)
 
 deltasim(airfoil, outfile, delta1, delta2, dstep, alfa)
 ps.wait()
