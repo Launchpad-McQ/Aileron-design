@@ -7,14 +7,15 @@ import os
 import re
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn import datasets, linear_model
 
 # Input of flap deflection angles.
 delta1 = float(raw_input("Lower delta limit:") or 14)
 delta2 = float(raw_input("Upper delta limit:") or 14.4)
 dstep = float(raw_input("delta step length:") or 0.2)
 airfoil = str(raw_input("Enter airfoil file name: ") or "load naca632615.dat")
+alfa = str(raw_input("Alfa (angle of attack of wing. default 2):") or 2)
 flaphingexpos =  str(raw_input("Flap hinge x position: ") or 0.75)
+bolcal = str(raw_input("Calculate roll helix angle? (y/n)") or "n")
 
 outfile = "flaptest" + str(delta1) + "-"+ str(delta2) + "__" + str(time.strftime("%H_%M_%S")) + ".txt" 
 
@@ -70,7 +71,7 @@ def deltasim(airfoil, outfile, delta1, delta2, dstep):
 		load_smooth(airfoil)
 		setflap(str(delta))
 		issueCmd("OPER")
-		issueCmd("alfa 2")
+		issueCmd("alfa" + alfa)
 		#time.sleep(1)
 		issueCmd("")
 	issueCmd("QUIT")
@@ -89,12 +90,10 @@ def getClarray(outfile):
 	        lines.append(line)
 
 
-
-
-	# Find location of data from ---- divider
-	for i, line in enumerate(lines):
-	    if re.match('\s*---', line):
-	        dividerIndex = i
+		# Find location of data from ---- divider
+		for i, line in enumerate(lines):
+		    if re.match('\s*---', line):
+		        dividerIndex = i
 
 
 	# What columns mean
@@ -128,7 +127,7 @@ def getClarray(outfile):
 def plotClvd(outfile, delta1, delta2, dstep):
 	clarray = getClarray(outfile)
 	length = len(clarray)
-
+	clarray = np.array(clarray)
 
 	# Making array shorter because of unconverged simulations.
 	deltamax = delta1 + dstep * (length-1)
@@ -137,17 +136,30 @@ def plotClvd(outfile, delta1, delta2, dstep):
 	# Number of unconverged simulations.
 	noncon = len(np.arange(delta1, delta2 + 0.01, dstep)) - len(newdvec)
 	print "\n"
-	print "Number of delta angled with converged simulation: " + str(len(newdvec))
+	print "Number of delta angles with converged simulation: " + str(len(newdvec))
 	print "Number of not converged simulations: " + str(noncon)
 
 
+	# Linear fitting to obtain clda (/ deg).
+	x = newdvec
+	y = clarray
 
-	plt.plot(newdvec,np.array(clarray),'bo')
+	fit = np.polyfit(x,y,1)
+	cldadeg = fit[0]
+	print "clda (per deg): " + str(cldadeg)
+	fit_fn = np.poly1d(fit) 
 
-	plt.ylabel('C_l')
-	plt.xlabel('\delta')
+	if noncon == 0:
+		print "clda (/ deg): " + str(cldadeg)
+	else:
+		print "Warning!!! Missing values of Cl since not converged"
+		print "bad clda (per deg): " + str(cldadeg)
+
+	plt.plot(x,y, 'ro', x, fit_fn(x), '--k')
+	
 	plt.show()
 
+	return cldadeg
 
 
 
@@ -156,4 +168,37 @@ deltasim(airfoil, outfile, delta1, delta2, dstep)
 ps.wait()
 
 # Plotting Cl vs delta.
-plotClvd(outfile, delta1, delta2, dstep)
+cldadeg = plotClvd(outfile, delta1, delta2, dstep)
+
+
+#_________________________________________________________________________________
+# Calculation.
+if (bolcal == "y"):
+
+	b = float(raw_input("Wing span: ") or 1.7)
+	S = float(raw_input("Wing area: ") or 0.358)
+	taper = float(raw_input("Wing taper: ") or 0.45)
+	cord = float(raw_input("Wing cord: ") or 0.122)
+	delta = float(raw_input("max aileron deflection (degrees): ") or delta2)
+
+	deltarad = 2*np.pi*delta/360
+	p = 2*(1-taper)
+
+	Clp = -0.358
+	cldarad = cldadeg*360/(2*np.pi)
+	print "clda (/rad)" + str(cldarad)
+	while True:
+		delta = float(raw_input("max aileron deflection (degrees): ") or delta)
+		print "Set position of aileron (ctrl c to exit)"
+		b1 = float(raw_input("Inner position: ") or 0.38)
+		b2 = float(raw_input("Outer positien: ") or 0.8)
+
+		Clda = (2*cldarad*cord/(S*b))*(((b2**2)/2-((p/b)*b2**3)/3)-((b1**2)/2-(p/b)*(b1**3)/3))
+		rollhelixangle = -deltarad*Clda/Clp
+		print "\n" + "Clda is: " 
+		print str(Clda)
+		print "Roll helik angle (rad): "
+		print str(rollhelixangle)
+		print "(Fighter 0.09, cargo/heavy transport 0.07"
+		print "\n"
+
