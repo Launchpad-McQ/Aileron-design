@@ -1,8 +1,8 @@
 # flapstest
-* What it does:
+## What it does:
   Helps you to calculate your aileron position and size.
   
-* How to use:
+## How to use:
 1. Put flapstest.py in same folder as your airfoil .dat file, xfoil.exe or (xfoil.app for mac os x users).
 1. Run the python script and it will be self explanatory.
 
