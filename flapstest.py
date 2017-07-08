@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Input of flap deflection angles.
-print "delta is flap deflection angle"
+reynolds = str(raw_input("reynolds number to calculate with (default 100 000):") or 100000)
+print "Delta is flap deflection angle"
 delta1 = float(raw_input("Lower delta limit:") or 14)
 delta2 = float(raw_input("Upper delta limit:") or 15)
 dstep = float(raw_input("delta step length (default 0.2):") or 0.2)
@@ -60,12 +61,12 @@ def load_smooth(airfoil):
 	issueCmd("PANE")
 
 # Simulating airfoil for selected deltas.
-def deltasim(airfoil, outfile, delta1, delta2, dstep, alfa):
+def deltasim(airfoil, outfile, delta1, delta2, dstep, alfa, reynolds):
 	load_smooth(airfoil)
 	issueCmd("OPER") # Go to the OPER menu.
 	issueCmd("ITER 1000") # Max number of iterations set to 70 for convergence.
-	issueCmd("RE 100000") # Set Reynolds number.
-	issueCmd("VISC 100000") # Set viscous calculation with Reynolds number.
+	issueCmd("RE " + reynolds) # Set Reynolds number.
+	issueCmd("VISC " + reynolds) # Set viscous calculation with Reynolds number.
 
 	issueCmd("PACC") # Enter PACC menu.
 	issueCmd(outfile) # Output file for xfoil polars.
@@ -80,12 +81,12 @@ def deltasim(airfoil, outfile, delta1, delta2, dstep, alfa):
 		issueCmd("")
 	issueCmd("QUIT")
 
-def alpha0sim(airfoil,zeroaoaoutfile):
+def alpha0sim(airfoil,zeroaoaoutfile,reynolds):
 	load_smooth(airfoil)
 	issueCmd("OPER") # Go to the OPER menu.
 	issueCmd("ITER 1000") # Max number of iterations set to 70 for convergence.
-	issueCmd("RE 100000") # Set Reynolds number.
-	issueCmd("VISC 100000") # Set viscous calculation with Reynolds number.
+	issueCmd("RE " + reynolds) # Set Reynolds number.
+	issueCmd("VISC " + reynolds) # Set viscous calculation with Reynolds number.
 
 	issueCmd("PACC") # Enter PACC menu.
 	issueCmd(zeroaoaoutfile) # Output file for xfoil polars.
@@ -104,14 +105,14 @@ def alpha0sim(airfoil,zeroaoaoutfile):
 
 
 # Running simulation.
-alpha0sim(airfoil,zeroaoaoutfile)
+alpha0sim(airfoil,zeroaoaoutfile,reynolds)
 
 try:
     ps = sp.Popen(["xfoil.exe"],stdin=sp.PIPE,stdout=None,stderr=None)
 except OSError as e:
 	ps = sp.Popen(["xfoil.app/Contents/Resources/xfoil"],stdin=sp.PIPE,stdout=None,stderr=None)
 
-deltasim(airfoil, outfile, delta1, delta2, dstep, alfa)
+deltasim(airfoil, outfile, delta1, delta2, dstep, alfa, reynolds)
 ps.wait()
 
 #__________________________________________________________________________________________
