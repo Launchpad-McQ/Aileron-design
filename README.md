@@ -14,6 +14,6 @@
 
   (You can skip input and use default by just pressing enter when prompted for input)
   
- * In the graph that appears you want a got fit between the line and dots since the slope of this line is Change in lift coefficient with aileron deflection. You also probably want to have all simulations to have converged or the aileron effectiveness will be a little overestimated.
+ * In the graph that appears you want a good fit between the line and dots since the slope of this line is Change in lift coefficient with aileron deflection. You also probably want to have all simulations to have converged or the aileron effectiveness will be a little overestimated.
 
 * If you want to design ailerons you want "Upper delta limit" to be your maximum downward aileron angle and "Lower delta limit" to be close to your maximum downward aileron angle.
