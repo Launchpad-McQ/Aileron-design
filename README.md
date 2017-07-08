@@ -3,7 +3,7 @@
   Helps you to calculate your aileron position and size for airplanes in small reynolds numbers (limitation of xfoil) such as RC planes. It will give you a roll helix angle which tells you your sustained roll capability. 
   
 ## How to use:
-1. Put flapstest.py in same folder as your airfoil.dat file, xfoil.exe or (xfoil.app for mac os x users).
+1. Put design-aileron.py in same folder as your airfoil.dat file, xfoil.exe or (xfoil.app for mac os x users).
 
   (You can find airfoil.dat files at http://airfoiltools.com)
   (You can download xfoil at http://web.mit.edu/drela/Public/web/xfoil/)
