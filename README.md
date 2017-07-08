@@ -8,7 +8,9 @@
   (You can find airfoil.dat files at http://airfoiltools.com)
   (You can download xfoil at http://web.mit.edu/drela/Public/web/xfoil/)
   
-1. Run the python script and it will be self explanatory. (Written in python 2.7)
+2. Run the python script and it will be self explanatory. (Written in python 2.7)
+
+  You can stop the script with ctrl-c at any time.
 
   (You can skip input and use default by just pressing enter when prompted for input)
   
