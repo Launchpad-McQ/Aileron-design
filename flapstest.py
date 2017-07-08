@@ -172,6 +172,7 @@ def plotClvd(outfile, delta1, delta2, dstep):
 	# Number of unconverged simulations.
 	noncon = len(np.arange(delta1, delta2 + 0.01, dstep)) - len(newdvec)
 	print "\n"
+	print "-------------------------------------------------"
 	print "Number of delta angles with converged simulation: " + str(len(newdvec))
 	print "Number of not converged simulations: " + str(noncon)
 
@@ -185,13 +186,17 @@ def plotClvd(outfile, delta1, delta2, dstep):
 	fit_fn = np.poly1d(fit) 
 
 	if noncon == 0:
-		print "clda (/ deg): " + str(cldadeg)
+		print "clda (Change in lift coefficient with aileron deflection) (/ deg): " + str(cldadeg)
 	else:
 		print "Warning!!! Missing values of Cl since not converged"
-		print "bad clda (/ deg): " + str(cldadeg)
+		print "bad(overestimated) clda (Change in lift coefficient with aileron deflection) (/ deg): " + str(cldadeg)
 
+	print "-------------------------------------------------"
+	print "In the graph that appears you want a good fit between the line and dots since the slope of this line is the Change in lift coefficient with aileron deflection."
+	print "Close graph to proceed to calculations."
 	plt.plot(x,y, 'ro', x, fit_fn(x), '--k')
-	
+	plt.ylabel('C_l (Coefficient of lift)')
+	plt.xlabel('\delta (Flap deflection angle)')
 	plt.show()
 
 	return cldadeg
@@ -214,7 +219,7 @@ def setgeo():
 	taper = float(raw_input("Wing taper: ") or 0.45)
 	cord = float(raw_input("Wing cord: ") or 0.122)
 	delta = float(raw_input("Max aileron deflection (degrees): ") or delta2)
-	print "Set position of aileron. b1 is distance from plane of symmerty to inner edge of aileron. b2 is distance plane of symmery to outer edge of aileron."
+	print "Set position of aileron. b1 is distance from plane of symmerty to inner edge of aileron. b2 is the distance from plane of symmery to outer edge of aileron."
 	b1 = float(raw_input("Inner position b1: ") or 0.38)
 	b2 = float(raw_input("Outer positien b2: ") or 0.8)
 
