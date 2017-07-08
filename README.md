@@ -1,4 +1,4 @@
-# Flapstest
+# Aileron-design
 ## What it does:
   Helps you to calculate your aileron position and size for airplanes in small reynolds numbers (limitation of xfoil) such as RC planes. It will give you a roll helix angle which tells you your sustained roll capability. 
   
